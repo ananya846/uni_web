@@ -336,7 +336,7 @@
   </div>
   <div class="hero-right">
     <!-- Replace with the actual building image path when you have it locally -->
-    <img class="hero-image" src="1774589334857_image.png" alt="BMS Jubilee Academic Block" onerror="this.style.display='none'"/>
+   <img class="hero-image" src="bms.jpg" alt="BMS Jubilee Academic Block">
     <div class="hero-image-overlay"></div>
     <div class="hero-badge">
       <div class="hero-badge-title">Jubilee Academic Block</div>
@@ -515,10 +515,7 @@
   </div>
 </footer>
 <script type="module">
-import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
-
-const supabaseUrl = 'YOUR_URL'
-const supabaseKey = 'YOUR_ANON_KEY'
+import { supabase } from './supabaseClient.js'
 
 const supabase = createClient(supabaseUrl, supabaseKey)
 

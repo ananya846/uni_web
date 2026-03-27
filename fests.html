@@ -227,63 +227,8 @@
   </div>
 </footer>
 
-<script>
-  function setTheme(theme, btn) {
-    const body = document.getElementById('festBody');
-    body.className = theme === 'default' ? '' : 'theme-' + theme;
-
-    document.querySelectorAll('.theme-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-
-    if(theme === 'phaseshift') {
-      document.getElementById('festName').innerHTML = 'PHASE<span>SHIFT</span>';
-      document.getElementById('festSub').textContent = 'Annual Technical & Cultural Extravaganza';
-      document.getElementById('festDate').textContent = '📅 April 19–21, 2024 · BMSCE Campus';
-      document.getElementById('fstat1').textContent = '10K+';
-      document.getElementById('fstat2').textContent = '50+';
-      document.getElementById('fstat3').textContent = '₹5L+';
-      document.getElementById('eventsTitle').textContent = 'Events & Competitions';
-      spawnParticles('#00FFD1');
-    } else if(theme === 'utsav') {
-      document.getElementById('festName').innerHTML = 'UTS<span>AV</span>';
-      document.getElementById('festSub').textContent = 'Annual Cultural Celebration';
-      document.getElementById('festDate').textContent = '📅 February 8–10, 2025 · BMSCE Campus';
-      document.getElementById('fstat1').textContent = '6K+';
-      document.getElementById('fstat2').textContent = '30+';
-      document.getElementById('fstat3').textContent = '₹2L+';
-      document.getElementById('eventsTitle').textContent = 'Cultural Events';
-      document.getElementById('eventsGrid').innerHTML = `
-        <div class="event-card"><div class="event-icon">💃</div><div class="event-name">Solo Dance Competition</div><div class="event-type">Cultural · Individual</div></div>
-        <div class="event-card"><div class="event-icon">🎭</div><div class="event-name">Dramatics — Nukkad</div><div class="event-type">Cultural · Street Play</div></div>
-        <div class="event-card"><div class="event-icon">🎨</div><div class="event-name">Art Exhibition</div><div class="event-type">Cultural · Fine Arts</div></div>
-        <div class="event-card"><div class="event-icon">👗</div><div class="event-name">Fashion Show</div><div class="event-type">Cultural · Design</div></div>
-        <div class="event-card"><div class="event-icon">🎤</div><div class="event-name">Western Vocals</div><div class="event-type">Cultural · Music</div></div>
-        <div class="event-card"><div class="event-icon">📸</div><div class="event-name">Photography Contest</div><div class="event-type">Cultural · Visual Arts</div></div>
-      `;
-      spawnParticles('#FFB347');
-    } else {
-      document.getElementById('particles').innerHTML = '';
-    }
-  }
-
-  function spawnParticles(color) {
-    const container = document.getElementById('particles');
-    container.innerHTML = '';
-    for(let i = 0; i < 18; i++) {
-      const p = document.createElement('div');
-      p.className = 'particle';
-      const size = Math.random() * 8 + 4;
-      p.style.cssText = `
-        width:${size}px;height:${size}px;
-        background:${color};
-        left:${Math.random()*100}%;
-        animation-duration:${Math.random()*8+6}s;
-        animation-delay:${Math.random()*5}s;
-        opacity:0.3;
-      `;
-      container.appendChild(p);
-    }
-  }
-</script>
+<script type="module" src="supabaseClient.js"></script>
+<script type="module" src="fests.js"></script>
+</body>
 </body>
 </html>
