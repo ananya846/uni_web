@@ -93,55 +93,8 @@
   <button class="upload-btn" onclick="openModal()">+ Submit a Project</button>
 </div>
 
-<div class="proj-grid">
-  <div class="proj-card" data-dept="cse">
-    <div class="verified-badge">✓ Verified</div>
-    <div class="proj-dept">CSE · AI &amp; ML</div>
-    <div class="proj-title">Real-time Sign Language Translator using MediaPipe and LSTM</div>
-    <div class="proj-desc">A mobile-based app that translates Indian Sign Language to text in real time. Achieved 94% accuracy on ISL-CSLRT dataset.</div>
-    <div class="proj-tags"><span class="tag">Python</span><span class="tag">MediaPipe</span><span class="tag">LSTM</span><span class="tag">Flutter</span></div>
-    <div class="proj-footer"><span class="proj-author">Sneha Rao, Rahul M · 7th Sem</span><span class="proj-year">2023–24</span></div>
-  </div>
-  <div class="proj-card" data-dept="cse">
-    <div class="verified-badge">✓ Verified</div>
-    <div class="proj-dept">CSE · AIDS</div>
-    <div class="proj-title">Pothole Detection and Road Quality Mapping using YOLOv8</div>
-    <div class="proj-desc">Trained YOLOv8 on 4,000+ pothole images collected from Bengaluru roads. Integrated with GPS to build a live quality map.</div>
-    <div class="proj-tags"><span class="tag">YOLOv8</span><span class="tag">OpenCV</span><span class="tag">GPS API</span><span class="tag">React</span></div>
-    <div class="proj-footer"><span class="proj-author">Kiran B, Meera G · 6th Sem</span><span class="proj-year">2023–24</span></div>
-  </div>
-  <div class="proj-card" data-dept="ece">
-    <div class="verified-badge">✓ Verified</div>
-    <div class="proj-dept">ECE</div>
-    <div class="proj-title">Low-Power IoT Gateway for Agricultural Soil Monitoring</div>
-    <div class="proj-desc">ESP32-based wireless sensor network for monitoring soil moisture, temperature and pH across farm plots. MQTT protocol, solar-powered.</div>
-    <div class="proj-tags"><span class="tag">ESP32</span><span class="tag">MQTT</span><span class="tag">IoT</span><span class="tag">PCB Design</span></div>
-    <div class="proj-footer"><span class="proj-author">Aditya S, Pooja N · 7th Sem</span><span class="proj-year">2023–24</span></div>
-  </div>
-  <div class="proj-card" data-dept="mech">
-    <div class="verified-badge">✓ Verified</div>
-    <div class="proj-dept">Mechanical</div>
-    <div class="proj-title">Design and Fabrication of Low-Cost Prosthetic Hand</div>
-    <div class="proj-desc">A 3D-printed, EMG-controlled prosthetic hand built for under ₹3,500. Presented at SIH 2023 and received state-level recognition.</div>
-    <div class="proj-tags"><span class="tag">EMG Sensing</span><span class="tag">3D Printing</span><span class="tag">Arduino</span></div>
-    <div class="proj-footer"><span class="proj-author">Varun K, Aditi M · 8th Sem</span><span class="proj-year">2022–23</span></div>
-  </div>
-  <div class="proj-card" data-dept="civil">
-    <div class="verified-badge">✓ Verified</div>
-    <div class="proj-dept">Civil</div>
-    <div class="proj-title">Flood Risk Mapping of Bengaluru using GIS and Satellite Data</div>
-    <div class="proj-desc">Used QGIS and Sentinel-2 satellite imagery to map flood-prone zones across Bengaluru's Outer Ring Road belt. Won SIH 2023.</div>
-    <div class="proj-tags"><span class="tag">QGIS</span><span class="tag">Sentinel-2</span><span class="tag">Python</span></div>
-    <div class="proj-footer"><span class="proj-author">Tanvi Shah, Nikhil P · 8th Sem</span><span class="proj-year">2023–24</span></div>
-  </div>
-  <div class="proj-card" data-dept="cse">
-    <div class="verified-badge">✓ Verified</div>
-    <div class="proj-dept">CSE · CSB</div>
-    <div class="proj-title">AI-powered College Timetable Scheduler</div>
-    <div class="proj-desc">Constraint-satisfaction algorithm that auto-generates conflict-free timetables. Used by CSE dept internally since Jan 2024.</div>
-    <div class="proj-tags"><span class="tag">Python</span><span class="tag">OR-Tools</span><span class="tag">FastAPI</span></div>
-    <div class="proj-footer"><span class="proj-author">Ritesh V, Asha P · 6th Sem</span><span class="proj-year">2023–24</span></div>
-  </div>
+<div class="proj-grid" id="projects-container">
+  <!-- Projects will be loaded here -->
 </div>
 
 <!-- UPLOAD MODAL -->
@@ -176,17 +129,69 @@
   </div>
 </footer>
 
-<script>
-  function filterProj(btn, dept) {
-    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    document.querySelectorAll('.proj-card').forEach(c => {
-      c.style.display = (dept === 'all' || c.dataset.dept === dept) ? '' : 'none';
-    });
+
+  <script type="module">
+import { supabase } from './supabaseClient.js'
+
+let allProjects = []
+
+async function loadProjects() {
+  const { data, error } = await supabase
+    .from('projects')
+    .select('*')
+    .order('year', { ascending: false })
+
+  if (error) {
+    console.error(error)
+    return
   }
-  function openModal() { document.getElementById('modalOverlay').classList.add('open'); }
-  function closeModal(e) { if(e.target === document.getElementById('modalOverlay')) document.getElementById('modalOverlay').classList.remove('open'); }
-  function submitProject() { alert('Project submitted for review! You will receive confirmation via email within 3–5 working days.'); document.getElementById('modalOverlay').classList.remove('open'); }
+
+  allProjects = data
+  renderProjects('all')
+}
+
+function renderProjects(dept) {
+  const container = document.getElementById('projects-container')
+  container.innerHTML = ''
+
+  const filtered = dept === 'all' ? allProjects : allProjects.filter(p => {
+    if (dept === 'cse') return p.department.includes('CSE');
+    if (dept === 'ece') return p.department.includes('ECE');
+    if (dept === 'mech') return p.department.includes('Mechanical');
+    if (dept === 'civil') return p.department.includes('Civil');
+    return false;
+  });
+
+  filtered.forEach(p => {
+    const tags = p.technologies ? p.technologies.split(',').map(t => `<span class="tag">${t.trim()}</span>`).join('') : '';
+    const authorParts = p.author ? p.author.split(' · ') : ['', ''];
+    const authors = authorParts[0];
+    const semester = authorParts[1] || '';
+    const card = `
+      <div class="proj-card" data-dept="${dept}">
+        ${p.verified ? '<div class="verified-badge">✓ Verified</div>' : ''}
+        <div class="proj-dept">${p.department}</div>
+        <div class="proj-title">${p.title}</div>
+        <div class="proj-desc">${p.description}</div>
+        <div class="proj-tags">${tags}</div>
+        <div class="proj-footer">
+          <span class="proj-author">${authors} · ${semester}</span>
+          <span class="proj-year">${p.year}</span>
+        </div>
+      </div>
+    `
+    container.innerHTML += card
+  })
+}
+
+window.filterProj = function(btn, dept) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'))
+  btn.classList.add('active')
+  renderProjects(dept)
+}
+
+loadProjects()
 </script>
+
 </body>
 </html>

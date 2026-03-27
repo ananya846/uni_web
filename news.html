@@ -123,59 +123,8 @@
 </div>
 
 <div class="news-grid">
-  <div class="news-main">
-    <div class="news-featured" data-cat="placement">
-      <div class="news-feat-img">🏢</div>
-      <div class="news-feat-body">
-        <span class="news-cat">Placements</span>
-        <div class="news-h">Microsoft visits BMSCE for the 3rd consecutive year, places 1 student at ₹42 LPA</div>
-        <div class="news-p">The 2023–24 placement season saw Microsoft return to BMSCE's campus. The highest offer went to Arjun Krishnamurthy from the CSE (AI &amp; ML) department — the highest package in the college's recent history.</div>
-        <div class="news-meta">March 12, 2024 · Placement Cell</div>
-      </div>
-    </div>
-
-    <div class="news-item" data-cat="event">
-      <div class="news-item-icon">🎭</div>
-      <div>
-        <div class="news-item-title">PhaseShift 2024 registrations now open — theme announced: "Neon Nexus"</div>
-        <div class="news-item-meta">Feb 20, 2024 · Fest Committee</div>
-      </div>
-    </div>
-    <div class="news-item" data-cat="achievement">
-      <div class="news-item-icon">🏆</div>
-      <div>
-        <div class="news-item-title">BMSCE team wins Smart India Hackathon 2023 — Civil Dept project on flood prediction</div>
-        <div class="news-item-meta">Dec 19, 2023 · SIH Team</div>
-      </div>
-    </div>
-    <div class="news-item" data-cat="academic">
-      <div class="news-item-icon">📋</div>
-      <div>
-        <div class="news-item-title">VTU exam schedule released — 6th semester exams begin April 8, 2024</div>
-        <div class="news-item-meta">Mar 5, 2024 · Examination Cell</div>
-      </div>
-    </div>
-    <div class="news-item" data-cat="placement">
-      <div class="news-item-icon">💼</div>
-      <div>
-        <div class="news-item-title">Goldman Sachs Technology Analyst drive — 4 students from CSE placed at ₹18 LPA</div>
-        <div class="news-item-meta">Jan 30, 2024 · Placement Cell</div>
-      </div>
-    </div>
-    <div class="news-item" data-cat="event">
-      <div class="news-item-icon">🎤</div>
-      <div>
-        <div class="news-item-title">Guest lecture by ISRO scientist Dr. Anitha Rao — "Future of Space Technology"</div>
-        <div class="news-item-meta">Jan 15, 2024 · ECE Dept</div>
-      </div>
-    </div>
-    <div class="news-item" data-cat="achievement">
-      <div class="news-item-icon">🌍</div>
-      <div>
-        <div class="news-item-title">BMSCE student Riya Sharma selected for Google Summer of Code 2024</div>
-        <div class="news-item-meta">Apr 2, 2024 · CSE Dept</div>
-      </div>
-    </div>
+  <div class="news-main" id="news-container">
+    <!-- News will be loaded here -->
   </div>
 
   <div class="news-sidebar">
@@ -204,20 +153,85 @@
   </div>
 </footer>
 
+<!-- Supabase JS -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/supabase.min.js"></script>
 <script>
-  function handleSignup() {
-    const v = document.getElementById('emailInput').value;
-    if(!v || !v.includes('@')) { alert('Please enter a valid email.'); return; }
+  // 1. Initialize Supabase
+  const SUPABASE_URL = "https://rxkgkqijjrmuarqfbsta.supabase.co"; // replace with your URL
+  "sb_publishable_YD-kM_WOVu-nQCDT1JgpIw_jP0ELsxB"
+  const SUPABASE_ANON_KEY = ""; // replace with your anon key
+  const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  // 2. Newsletter signup
+  async function handleSignup() {
+    const email = document.getElementById('emailInput').value;
+    if (!email || !email.includes('@')) {
+      alert('Please enter a valid email.');
+      return;
+    }
+
+    const { data, error } = await supabase
+      .from('newsletter_subscribers')
+      .insert([{ email }]);
+
+    if (error) {
+      alert('Error: ' + error.message);
+      return;
+    }
+
     document.getElementById('signupForm').style.display = 'none';
     document.getElementById('signupSuccess').style.display = 'block';
   }
-  function filterNews(btn, cat) {
-    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    document.querySelectorAll('[data-cat]').forEach(el => {
-      el.style.display = (cat === 'all' || el.dataset.cat === cat) ? '' : 'none';
+
+  // 3. Load news dynamically
+  async function loadNews() {
+    const { data: newsItems, error } = await supabase
+      .from('news_items')
+      .select('*')
+      .order('published_at', { ascending: false });
+
+    if (error) { console.error(error); return; }
+
+    allNews = newsItems;
+    renderNews('all');
+  }
+
+  function renderNews(category) {
+    const newsMain = document.getElementById('news-container');
+    newsMain.innerHTML = ''; // clear existing HTML
+
+    const filtered = category === 'all' ? allNews : allNews.filter(item => item.category === category);
+
+    filtered.forEach(item => {
+      const div = document.createElement('div');
+      div.className = item.icon ? 'news-featured' : 'news-item';
+      div.dataset.cat = item.category;
+
+      div.innerHTML = `
+        <div class="${item.icon ? 'news-feat-img' : 'news-item-icon'}">${item.icon || '📰'}</div>
+        <div>
+          <div class="${item.icon ? 'news-feat-body' : 'news-item-title'}">
+            ${item.title}
+          </div>
+          <div class="${item.icon ? 'news-meta' : 'news-item-meta'}">
+            ${item.author ? item.author + ' · ' : ''}${new Date(item.published_at).toLocaleDateString()}
+          </div>
+          ${item.content && item.icon ? `<div class="news-p">${item.content}</div>` : ''}
+        </div>
+      `;
+
+      newsMain.appendChild(div);
     });
   }
+
+  window.filterNews = function(btn, category) {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    renderNews(category);
+  }
+
+  let allNews = [];
+  loadNews(); // call on page load
 </script>
 </body>
 </html>
