@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Student Projects | BMS University</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  :root{--brick:#8B3A3A;--brick-dk:#6B2A2A;--sand:#F5EDD8;--steel:#2E6DA4;--charcoal:#1C1C1E;--off-white:#FAFAF7;--mid-gray:#6E6E73;--border:rgba(139,58,58,0.15);}
+  html{scroll-behavior:smooth;}
+  body{font-family:'DM Sans',sans-serif;background:var(--off-white);color:var(--charcoal);}
+  nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(250,250,247,0.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 4rem;height:68px;}
+  .nav-brand{display:flex;align-items:center;gap:12px;text-decoration:none;}
+  .nav-logo{width:38px;height:38px;border-radius:8px;background:var(--brick);display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;color:white;font-size:16px;font-weight:700;}
+  .nav-title{font-family:'Playfair Display',serif;font-size:18px;font-weight:600;color:var(--charcoal);}
+  .nav-links{display:flex;align-items:center;gap:2rem;}
+  .nav-links a{text-decoration:none;font-size:14px;color:var(--mid-gray);transition:color 0.2s;}
+  .nav-links a:hover,.nav-links a.active{color:var(--brick);}
+  .btn-campus{background:var(--brick);color:white;border:none;border-radius:8px;padding:9px 20px;font-size:13px;font-weight:500;font-family:'DM Sans',sans-serif;cursor:pointer;text-decoration:none;display:inline-block;}
+  .page-header{padding:6rem 4rem 3rem;background:linear-gradient(to bottom,var(--sand),var(--off-white));border-bottom:1px solid var(--border);}
+  .page-tag{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--brick);font-weight:500;margin-bottom:0.75rem;}
+  .page-title{font-family:'Playfair Display',serif;font-size:clamp(2rem,3.5vw,3.2rem);font-weight:700;color:var(--charcoal);margin-bottom:0.75rem;}
+  .page-subtitle{font-size:16px;color:var(--mid-gray);line-height:1.8;max-width:600px;}
+
+  .proj-controls{padding:2rem 4rem;display:flex;gap:1rem;align-items:center;flex-wrap:wrap;justify-content:space-between;}
+  .filter-row{display:flex;gap:0.5rem;flex-wrap:wrap;}
+  .filter-btn{padding:7px 16px;border-radius:30px;font-size:13px;font-weight:500;border:1.5px solid var(--border);background:white;color:var(--mid-gray);cursor:pointer;transition:all 0.2s;font-family:'DM Sans',sans-serif;}
+  .filter-btn.active,.filter-btn:hover{background:var(--brick);color:white;border-color:var(--brick);}
+  .upload-btn{padding:10px 22px;background:var(--steel);color:white;border:none;border-radius:10px;font-size:14px;font-weight:500;font-family:'DM Sans',sans-serif;cursor:pointer;}
+  .upload-btn:hover{background:#245a8a;}
+
+  .proj-grid{padding:0 4rem 5rem;display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1.5rem;}
+  .proj-card{background:white;border:1px solid var(--border);border-radius:16px;padding:1.5rem;transition:transform 0.2s,box-shadow 0.2s;position:relative;}
+  .proj-card:hover{transform:translateY(-4px);box-shadow:0 10px 28px rgba(139,58,58,0.1);}
+  .proj-dept{font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--brick);font-weight:500;margin-bottom:0.5rem;}
+  .proj-title{font-size:15px;font-weight:500;color:var(--charcoal);margin-bottom:0.5rem;line-height:1.4;}
+  .proj-desc{font-size:13px;color:var(--mid-gray);line-height:1.6;margin-bottom:1rem;}
+  .proj-tags{display:flex;gap:0.5rem;flex-wrap:wrap;margin-bottom:1rem;}
+  .tag{font-size:11px;background:var(--sand);color:var(--brick);padding:3px 10px;border-radius:20px;}
+  .proj-footer{display:flex;justify-content:space-between;align-items:center;padding-top:0.75rem;border-top:1px solid var(--border);}
+  .proj-author{font-size:12px;color:var(--mid-gray);}
+  .proj-year{font-size:11px;color:rgba(110,110,115,0.5);}
+  .verified-badge{position:absolute;top:1rem;right:1rem;background:rgba(46,109,164,0.1);color:var(--steel);font-size:10px;padding:2px 8px;border-radius:20px;font-weight:500;}
+
+  .upload-modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:200;align-items:center;justify-content:center;}
+  .upload-modal-overlay.open{display:flex;}
+  .upload-modal{background:white;border-radius:20px;padding:2rem;width:500px;max-width:90vw;}
+  .modal-title{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:600;margin-bottom:1.5rem;}
+  .form-group{margin-bottom:1rem;}
+  .form-label{font-size:13px;font-weight:500;color:var(--charcoal);margin-bottom:6px;display:block;}
+  .form-input{width:100%;padding:10px 14px;border:1.5px solid var(--border);border-radius:8px;font-size:14px;font-family:'DM Sans',sans-serif;color:var(--charcoal);outline:none;}
+  .form-input:focus{border-color:var(--brick);}
+  .form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+  .modal-actions{display:flex;gap:1rem;margin-top:1.5rem;}
+  .btn-submit{flex:1;padding:12px;background:var(--brick);color:white;border:none;border-radius:10px;font-size:15px;font-weight:500;font-family:'DM Sans',sans-serif;cursor:pointer;}
+  .btn-cancel{padding:12px 20px;background:transparent;color:var(--mid-gray);border:1.5px solid var(--border);border-radius:10px;font-size:15px;font-family:'DM Sans',sans-serif;cursor:pointer;}
+  .modal-note{font-size:12px;color:var(--mid-gray);margin-top:1rem;line-height:1.6;}
+
+  footer{background:var(--charcoal);color:white;padding:2rem 4rem;display:flex;justify-content:space-between;align-items:center;}
+  .footer-brand{font-family:'Playfair Display',serif;font-size:16px;color:var(--sand);}
+  .footer-links{display:flex;gap:1.5rem;}
+  .footer-links a{font-size:13px;color:rgba(255,255,255,0.4);text-decoration:none;}
+  .footer-links a:hover{color:var(--sand);}
+  @media(max-width:900px){nav{padding:0 1.5rem;}.nav-links{display:none;}.page-header,.proj-controls,.proj-grid{padding-left:1.5rem;padding-right:1.5rem;}footer{flex-direction:column;gap:1rem;}}
+</style>
+</head>
+<body>
+<nav>
+  <a href="index.html" class="nav-brand"><div class="nav-logo">BMS</div><div class="nav-title">BMS University</div></a>
+  <div class="nav-links">
+    <a href="index.html">Home</a><a href="placements.html">Placements</a>
+    <a href="academia.html">Academia</a><a href="projects.html" class="active">Projects</a>
+    <a href="news.html">News</a><a href="fests.html">Fests</a>
+  </div>
+  <a href="campus-login.html" class="btn-campus">Campus Login →</a>
+</nav>
+
+<div class="page-header">
+  <div class="page-tag">Student Work</div>
+  <h1 class="page-title">Student Projects</h1>
+  <p class="page-subtitle">Verified and faculty-approved projects by BMSCE students. Browse by department, technology, or year. Students can submit projects for review via Campus Login.</p>
+</div>
+
+<div class="proj-controls">
+  <div class="filter-row">
+    <button class="filter-btn active" onclick="filterProj(this,'all')">All</button>
+    <button class="filter-btn" onclick="filterProj(this,'cse')">CSE</button>
+    <button class="filter-btn" onclick="filterProj(this,'ece')">ECE</button>
+    <button class="filter-btn" onclick="filterProj(this,'mech')">Mech</button>
+    <button class="filter-btn" onclick="filterProj(this,'civil')">Civil</button>
+  </div>
+  <button class="upload-btn" onclick="openModal()">+ Submit a Project</button>
+</div>
+
+<div class="proj-grid">
+  <div class="proj-card" data-dept="cse">
+    <div class="verified-badge">✓ Verified</div>
+    <div class="proj-dept">CSE · AI &amp; ML</div>
+    <div class="proj-title">Real-time Sign Language Translator using MediaPipe and LSTM</div>
+    <div class="proj-desc">A mobile-based app that translates Indian Sign Language to text in real time. Achieved 94% accuracy on ISL-CSLRT dataset.</div>
+    <div class="proj-tags"><span class="tag">Python</span><span class="tag">MediaPipe</span><span class="tag">LSTM</span><span class="tag">Flutter</span></div>
+    <div class="proj-footer"><span class="proj-author">Sneha Rao, Rahul M · 7th Sem</span><span class="proj-year">2023–24</span></div>
+  </div>
+  <div class="proj-card" data-dept="cse">
+    <div class="verified-badge">✓ Verified</div>
+    <div class="proj-dept">CSE · AIDS</div>
+    <div class="proj-title">Pothole Detection and Road Quality Mapping using YOLOv8</div>
+    <div class="proj-desc">Trained YOLOv8 on 4,000+ pothole images collected from Bengaluru roads. Integrated with GPS to build a live quality map.</div>
+    <div class="proj-tags"><span class="tag">YOLOv8</span><span class="tag">OpenCV</span><span class="tag">GPS API</span><span class="tag">React</span></div>
+    <div class="proj-footer"><span class="proj-author">Kiran B, Meera G · 6th Sem</span><span class="proj-year">2023–24</span></div>
+  </div>
+  <div class="proj-card" data-dept="ece">
+    <div class="verified-badge">✓ Verified</div>
+    <div class="proj-dept">ECE</div>
+    <div class="proj-title">Low-Power IoT Gateway for Agricultural Soil Monitoring</div>
+    <div class="proj-desc">ESP32-based wireless sensor network for monitoring soil moisture, temperature and pH across farm plots. MQTT protocol, solar-powered.</div>
+    <div class="proj-tags"><span class="tag">ESP32</span><span class="tag">MQTT</span><span class="tag">IoT</span><span class="tag">PCB Design</span></div>
+    <div class="proj-footer"><span class="proj-author">Aditya S, Pooja N · 7th Sem</span><span class="proj-year">2023–24</span></div>
+  </div>
+  <div class="proj-card" data-dept="mech">
+    <div class="verified-badge">✓ Verified</div>
+    <div class="proj-dept">Mechanical</div>
+    <div class="proj-title">Design and Fabrication of Low-Cost Prosthetic Hand</div>
+    <div class="proj-desc">A 3D-printed, EMG-controlled prosthetic hand built for under ₹3,500. Presented at SIH 2023 and received state-level recognition.</div>
+    <div class="proj-tags"><span class="tag">EMG Sensing</span><span class="tag">3D Printing</span><span class="tag">Arduino</span></div>
+    <div class="proj-footer"><span class="proj-author">Varun K, Aditi M · 8th Sem</span><span class="proj-year">2022–23</span></div>
+  </div>
+  <div class="proj-card" data-dept="civil">
+    <div class="verified-badge">✓ Verified</div>
+    <div class="proj-dept">Civil</div>
+    <div class="proj-title">Flood Risk Mapping of Bengaluru using GIS and Satellite Data</div>
+    <div class="proj-desc">Used QGIS and Sentinel-2 satellite imagery to map flood-prone zones across Bengaluru's Outer Ring Road belt. Won SIH 2023.</div>
+    <div class="proj-tags"><span class="tag">QGIS</span><span class="tag">Sentinel-2</span><span class="tag">Python</span></div>
+    <div class="proj-footer"><span class="proj-author">Tanvi Shah, Nikhil P · 8th Sem</span><span class="proj-year">2023–24</span></div>
+  </div>
+  <div class="proj-card" data-dept="cse">
+    <div class="verified-badge">✓ Verified</div>
+    <div class="proj-dept">CSE · CSB</div>
+    <div class="proj-title">AI-powered College Timetable Scheduler</div>
+    <div class="proj-desc">Constraint-satisfaction algorithm that auto-generates conflict-free timetables. Used by CSE dept internally since Jan 2024.</div>
+    <div class="proj-tags"><span class="tag">Python</span><span class="tag">OR-Tools</span><span class="tag">FastAPI</span></div>
+    <div class="proj-footer"><span class="proj-author">Ritesh V, Asha P · 6th Sem</span><span class="proj-year">2023–24</span></div>
+  </div>
+</div>
+
+<!-- UPLOAD MODAL -->
+<div class="upload-modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+  <div class="upload-modal" onclick="event.stopPropagation()">
+    <div class="modal-title">Submit a Project</div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Your Name</label><input class="form-input" type="text" placeholder="Full name"/></div>
+      <div class="form-group"><label class="form-label">Department</label>
+        <select class="form-input"><option>CSE · AI &amp; ML</option><option>CSE · AI &amp; DS</option><option>CSE · CSB</option><option>ECE</option><option>Mechanical</option><option>Civil</option></select>
+      </div>
+    </div>
+    <div class="form-group"><label class="form-label">Project Title</label><input class="form-input" type="text" placeholder="Your project name"/></div>
+    <div class="form-group"><label class="form-label">Description</label><textarea class="form-input" rows="3" placeholder="Brief description of the project, problem solved, and outcomes..."></textarea></div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Technologies Used</label><input class="form-input" type="text" placeholder="Python, React, etc."/></div>
+      <div class="form-group"><label class="form-label">Academic Year</label><input class="form-input" type="text" placeholder="2023–24"/></div>
+    </div>
+    <div class="form-group"><label class="form-label">GitHub / Demo Link (optional)</label><input class="form-input" type="url" placeholder="https://github.com/..."/></div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="document.getElementById('modalOverlay').classList.remove('open')">Cancel</button>
+      <button class="btn-submit" onclick="submitProject()">Submit for Review</button>
+    </div>
+    <div class="modal-note">⚠️ Projects are reviewed by faculty before being listed. You'll receive an email confirmation within 3–5 working days. Only submit work that is your own.</div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-brand">BMS University</div>
+  <div class="footer-links">
+    <a href="index.html">Home</a><a href="placements.html">Placements</a><a href="news.html">News</a>
+  </div>
+</footer>
+
+<script>
+  function filterProj(btn, dept) {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.proj-card').forEach(c => {
+      c.style.display = (dept === 'all' || c.dataset.dept === dept) ? '' : 'none';
+    });
+  }
+  function openModal() { document.getElementById('modalOverlay').classList.add('open'); }
+  function closeModal(e) { if(e.target === document.getElementById('modalOverlay')) document.getElementById('modalOverlay').classList.remove('open'); }
+  function submitProject() { alert('Project submitted for review! You will receive confirmation via email within 3–5 working days.'); document.getElementById('modalOverlay').classList.remove('open'); }
+</script>
+</body>
+</html>

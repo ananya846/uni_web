@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>BMS University | Engineering Excellence</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --brick:    #8B3A3A;
+    --brick-dk: #6B2A2A;
+    --brick-lt: #C47A7A;
+    --sand:     #F5EDD8;
+    --sand-dk:  #E8D9BA;
+    --steel:    #2E6DA4;
+    --steel-lt: #5D9AD4;
+    --charcoal: #1C1C1E;
+    --off-white:#FAFAF7;
+    --mid-gray: #6E6E73;
+    --border:   rgba(139,58,58,0.15);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--off-white);
+    color: var(--charcoal);
+    overflow-x: hidden;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: rgba(250,250,247,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 4rem; height: 68px;
+  }
+  .nav-brand {
+    display: flex; align-items: center; gap: 12px;
+  }
+  .nav-logo {
+    width: 38px; height: 38px; border-radius: 8px;
+    background: var(--brick);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Playfair Display', serif;
+    color: white; font-size: 16px; font-weight: 700; letter-spacing: 1px;
+  }
+  .nav-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px; font-weight: 600; color: var(--charcoal);
+    line-height: 1.2;
+  }
+  .nav-sub { font-size: 11px; color: var(--mid-gray); letter-spacing: 0.5px; }
+  .nav-links { display: flex; align-items: center; gap: 2rem; }
+  .nav-links a {
+    text-decoration: none; font-size: 14px; font-weight: 400;
+    color: var(--mid-gray); transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--brick); }
+  .btn-campus {
+    background: var(--brick); color: white;
+    border: none; border-radius: 8px;
+    padding: 9px 20px; font-size: 13px; font-weight: 500;
+    font-family: 'DM Sans', sans-serif;
+    cursor: pointer; transition: background 0.2s, transform 0.1s;
+    text-decoration: none; display: inline-block;
+  }
+  .btn-campus:hover { background: var(--brick-dk); transform: translateY(-1px); }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: grid; grid-template-columns: 1fr 1fr;
+    padding-top: 68px;
+  }
+  .hero-left {
+    padding: 6rem 4rem 4rem;
+    display: flex; flex-direction: column; justify-content: center;
+  }
+  .hero-eyebrow {
+    font-size: 11px; letter-spacing: 2px; text-transform: uppercase;
+    color: var(--brick); font-weight: 500; margin-bottom: 1.5rem;
+  }
+  .hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.8rem, 4vw, 4.2rem);
+    font-weight: 700; line-height: 1.1;
+    color: var(--charcoal); margin-bottom: 1.5rem;
+  }
+  .hero-title span { color: var(--brick); }
+  .hero-desc {
+    font-size: 16px; line-height: 1.8; color: var(--mid-gray);
+    max-width: 440px; margin-bottom: 2.5rem;
+  }
+  .hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; }
+  .btn-primary {
+    background: var(--brick); color: white;
+    border: none; border-radius: 10px;
+    padding: 14px 28px; font-size: 15px; font-weight: 500;
+    font-family: 'DM Sans', sans-serif; cursor: pointer;
+    transition: background 0.2s, transform 0.15s;
+    text-decoration: none; display: inline-block;
+  }
+  .btn-primary:hover { background: var(--brick-dk); transform: translateY(-2px); }
+  .btn-outline {
+    background: transparent; color: var(--charcoal);
+    border: 1.5px solid rgba(28,28,30,0.2); border-radius: 10px;
+    padding: 14px 28px; font-size: 15px; font-weight: 500;
+    font-family: 'DM Sans', sans-serif; cursor: pointer;
+    transition: border-color 0.2s, transform 0.15s;
+    text-decoration: none; display: inline-block;
+  }
+  .btn-outline:hover { border-color: var(--brick); color: var(--brick); transform: translateY(-2px); }
+
+  .hero-right {
+    position: relative; overflow: hidden;
+    background: var(--sand);
+  }
+  .hero-image {
+    width: 100%; height: 100%; object-fit: cover;
+    opacity: 0.88;
+  }
+  .hero-image-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(135deg, rgba(139,58,58,0.25) 0%, transparent 60%);
+  }
+  .hero-badge {
+    position: absolute; bottom: 2.5rem; left: 2.5rem;
+    background: rgba(250,250,247,0.95); backdrop-filter: blur(8px);
+    border-radius: 12px; padding: 14px 20px;
+    border: 1px solid rgba(139,58,58,0.12);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  }
+  .hero-badge-title { font-size: 13px; font-weight: 500; color: var(--charcoal); }
+  .hero-badge-sub { font-size: 11px; color: var(--mid-gray); margin-top: 2px; }
+
+  /* ── STATS ── */
+  .stats-bar {
+    background: var(--charcoal); color: white;
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    padding: 0 4rem;
+  }
+  .stat-item {
+    padding: 2rem 1rem; text-align: center;
+    border-right: 1px solid rgba(255,255,255,0.08);
+  }
+  .stat-item:last-child { border-right: none; }
+  .stat-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem; font-weight: 700; color: var(--sand);
+  }
+  .stat-label { font-size: 12px; color: rgba(255,255,255,0.5); margin-top: 4px; letter-spacing: 0.5px; }
+
+  /* ── SECTION COMMONS ── */
+  section { padding: 6rem 4rem; }
+  .section-tag {
+    font-size: 11px; letter-spacing: 2px; text-transform: uppercase;
+    color: var(--brick); font-weight: 500; margin-bottom: 1rem;
+  }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 3vw, 2.8rem);
+    font-weight: 700; line-height: 1.2; color: var(--charcoal);
+    margin-bottom: 1rem;
+  }
+  .section-lead {
+    font-size: 16px; color: var(--mid-gray); line-height: 1.8;
+    max-width: 600px; margin-bottom: 3rem;
+  }
+
+  /* ── ABOUT ── */
+  #about { background: var(--off-white); }
+  .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: start; }
+  .about-left {}
+  .about-right { padding-top: 1rem; }
+  .about-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 16px; padding: 1.5rem;
+    margin-bottom: 1rem; display: flex; gap: 1rem; align-items: flex-start;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .about-card:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(139,58,58,0.1); }
+  .about-icon {
+    width: 44px; height: 44px; border-radius: 10px;
+    background: var(--sand); display: flex; align-items: center;
+    justify-content: center; font-size: 20px; flex-shrink: 0;
+  }
+  .about-card-title { font-size: 15px; font-weight: 500; color: var(--charcoal); margin-bottom: 4px; }
+  .about-card-text { font-size: 13px; color: var(--mid-gray); line-height: 1.6; }
+  .honesty-box {
+    background: var(--sand);
+    border-left: 4px solid var(--brick);
+    border-radius: 0 12px 12px 0;
+    padding: 1.5rem; margin-top: 2rem;
+  }
+  .honesty-box p { font-size: 14px; color: var(--charcoal); line-height: 1.7; }
+  .honesty-box strong { color: var(--brick); }
+
+  /* ── VIRTUAL TOUR ── */
+  #virtual-tour {
+    background: var(--charcoal);
+    color: white; text-align: center;
+    position: relative; overflow: hidden;
+  }
+  #virtual-tour::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 50% 0%, rgba(139,58,58,0.3) 0%, transparent 65%);
+  }
+  #virtual-tour .section-title { color: var(--sand); }
+  #virtual-tour .section-tag { color: var(--brick-lt); }
+  #virtual-tour .section-lead { color: rgba(255,255,255,0.5); margin-left: auto; margin-right: auto; }
+  .tour-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem; position: relative; z-index: 1;
+  }
+  .tour-card {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 16px; padding: 2rem;
+    transition: background 0.2s, transform 0.2s;
+    cursor: pointer; text-align: left;
+  }
+  .tour-card:hover { background: rgba(255,255,255,0.1); transform: translateY(-4px); }
+  .tour-card-icon { font-size: 2rem; margin-bottom: 1rem; }
+  .tour-card-title { font-size: 16px; font-weight: 500; color: white; margin-bottom: 0.5rem; }
+  .tour-card-text { font-size: 13px; color: rgba(255,255,255,0.5); line-height: 1.6; }
+  .tour-coming-soon {
+    display: inline-block; margin-top: 12px;
+    font-size: 11px; background: rgba(139,58,58,0.4);
+    color: var(--brick-lt); padding: 3px 10px;
+    border-radius: 20px; letter-spacing: 0.5px;
+  }
+
+  /* ── QUICK LINKS / NAV TO OTHER PAGES ── */
+  #explore { background: var(--sand); }
+  .explore-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem;
+  }
+  .explore-card {
+    background: white; border: 1px solid var(--border);
+    border-radius: 16px; padding: 2rem;
+    text-decoration: none; color: inherit;
+    display: block; transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .explore-card:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(139,58,58,0.12); }
+  .explore-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem; font-weight: 700; color: var(--border-color);
+    color: rgba(139,58,58,0.2); margin-bottom: 1rem;
+  }
+  .explore-title { font-size: 17px; font-weight: 500; color: var(--charcoal); margin-bottom: 0.5rem; }
+  .explore-desc { font-size: 13px; color: var(--mid-gray); line-height: 1.6; }
+  .explore-arrow {
+    margin-top: 1.5rem; font-size: 13px; color: var(--brick);
+    font-weight: 500; display: flex; align-items: center; gap: 4px;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--charcoal); color: white;
+    padding: 3rem 4rem; display: flex;
+    justify-content: space-between; align-items: center;
+    border-top: 1px solid rgba(255,255,255,0.08);
+  }
+  .footer-brand { font-family: 'Playfair Display', serif; font-size: 18px; color: var(--sand); }
+  .footer-note { font-size: 12px; color: rgba(255,255,255,0.4); margin-top: 4px; }
+  .footer-links { display: flex; gap: 1.5rem; }
+  .footer-links a { font-size: 13px; color: rgba(255,255,255,0.4); text-decoration: none; transition: color 0.2s; }
+  .footer-links a:hover { color: var(--sand); }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .fade-up { animation: fadeUp 0.7s ease both; }
+  .delay-1 { animation-delay: 0.1s; }
+  .delay-2 { animation-delay: 0.2s; }
+  .delay-3 { animation-delay: 0.35s; }
+  .delay-4 { animation-delay: 0.5s; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    nav { padding: 0 1.5rem; }
+    .nav-links { display: none; }
+    .hero { grid-template-columns: 1fr; min-height: auto; }
+    .hero-left { padding: 5rem 1.5rem 2rem; }
+    .hero-right { height: 280px; }
+    .stats-bar { grid-template-columns: repeat(2, 1fr); padding: 0 1.5rem; }
+    section { padding: 4rem 1.5rem; }
+    .about-grid, .tour-grid, .explore-grid { grid-template-columns: 1fr; }
+    footer { flex-direction: column; gap: 1.5rem; text-align: center; }
+  }
+</style>
+</head>
+
+<body>
+<!-- NAV -->
+<nav>
+  <div class="nav-brand">
+    <div class="nav-logo">BMS</div>
+    <div>
+      <div class="nav-title">BMS University</div>
+      <div class="nav-sub">Est. 1946 · Bengaluru</div>
+    </div>
+  </div>
+  <div class="nav-links">
+    <a href="#about">About</a>
+    <a href="#virtual-tour">Virtual Tour</a>
+    <a href="placements.html">Placements</a>
+    <a href="academia.html">Academia</a>
+    <a href="news.html">News</a>
+    <a href="fests.html">Fests</a>
+  </div>
+  <a href="campus-login.html" class="btn-campus">Campus Login →</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero" style="padding:0;">
+  <div class="hero-left">
+    <div class="hero-eyebrow fade-up">BMS College of Engineering · Bengaluru</div>
+    <h1 class="hero-title fade-up delay-1">Where Engineers <span>Begin</span> Their Story</h1>
+    <p class="hero-desc fade-up delay-2">One of Karnataka's most respected engineering institutions. No inflated numbers. No fake promises. Just honest information to help you decide.</p>
+    <div class="hero-actions fade-up delay-3">
+      <a href="#about" class="btn-primary">Explore the College</a>
+      <a href="#virtual-tour" class="btn-outline">Take a Virtual Tour</a>
+    </div>
+  </div>
+  <div class="hero-right">
+    <!-- Replace with the actual building image path when you have it locally -->
+    <img class="hero-image" src="1774589334857_image.png" alt="BMS Jubilee Academic Block" onerror="this.style.display='none'"/>
+    <div class="hero-image-overlay"></div>
+    <div class="hero-badge">
+      <div class="hero-badge-title">Jubilee Academic Block</div>
+      <div class="hero-badge-sub">Main Campus · Bull Temple Road</div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS BAR -->
+<div class="stats-bar">
+  <div class="stat-item">
+    <div class="stat-num">78+</div>
+    <div class="stat-label">Years of Excellence</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num">14</div>
+    <div class="stat-label">Engineering Departments</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num">300+</div>
+    <div class="stat-label">Companies Visit Annually</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num">NBA</div>
+    <div class="stat-label">Accredited Programs</div>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="about-grid">
+    <div class="about-left">
+      <div class="section-tag">About BMSCE</div>
+      <h2 class="section-title">What We Actually Offer</h2>
+      <p class="section-lead">Real information, no marketing spin. Here's what you can genuinely expect when you join BMSCE.</p>
+      <div class="honesty-box">
+        <p><strong>Our transparency pledge:</strong> We don't pad placement numbers, overstate facilities, or show you only the best-case outcome. Every figure on this site is verified and sourced. You deserve accurate information before making a decision about your future.</p>
+      </div>
+    </div>
+    <div class="about-right">
+      <div class="about-card">
+        <div class="about-icon">🏛️</div>
+        <div>
+          <div class="about-card-title">Campus &amp; Infrastructure</div>
+          <div class="about-card-text">Spread across 18 acres on Bull Temple Road. Modern labs, well-stocked library, sports facilities, and hostels. The Jubilee Block opened in 2019 with state-of-the-art classrooms.</div>
+        </div>
+      </div>
+      <div class="about-card">
+        <div class="about-icon">🔬</div>
+        <div>
+          <div class="about-card-title">Laboratories</div>
+          <div class="about-card-text">Dedicated labs per department — AI/ML GPU servers, Electronics prototyping, Civil materials testing, and more. Some labs are well-funded; a few are still catching up.</div>
+        </div>
+      </div>
+      <div class="about-card">
+        <div class="about-icon">👩‍🏫</div>
+        <div>
+          <div class="about-card-title">Faculty</div>
+          <div class="about-card-text">Mix of PhD holders and industry-experienced staff. Quality varies by department. CSE and ECE tend to have stronger faculty pools. Direct feedback from current students is the best gauge.</div>
+        </div>
+      </div>
+      <div class="about-card">
+        <div class="about-icon">🏠</div>
+        <div>
+          <div class="about-card-title">Hostel &amp; Amenities</div>
+          <div class="about-card-text">Separate hostels for boys and girls. Mess food is average — most students eat outside. Canteen, gym, and medical centre on campus. 24/7 Wi-Fi in hostels.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- VIRTUAL TOUR -->
+<section id="virtual-tour">
+  <div class="section-tag">Virtual Tour</div>
+  <h2 class="section-title">See the Campus Before You Visit</h2>
+  <p class="section-lead">Can't make it to Bengaluru? Walk through the campus digitally. Full 360° tours coming soon — here's a preview of what you'll explore.</p>
+  <div class="tour-grid">
+    <div class="tour-card">
+      <div class="tour-card-icon">🏛️</div>
+      <div class="tour-card-title">Main Building</div>
+      <div class="tour-card-text">The historic 1946 block and the newer Jubilee Academic Building — the heart of BMSCE.</div>
+      <span class="tour-coming-soon">360° tour coming soon</span>
+    </div>
+    <div class="tour-card">
+      <div class="tour-card-icon">🔬</div>
+      <div class="tour-card-title">Labs &amp; Studios</div>
+      <div class="tour-card-text">Department labs across CSE, ECE, Mechanical, Civil, and Architecture wings.</div>
+      <span class="tour-coming-soon">360° tour coming soon</span>
+    </div>
+    <div class="tour-card">
+      <div class="tour-card-icon">📚</div>
+      <div class="tour-card-title">Central Library</div>
+      <div class="tour-card-text">Over 1 lakh books, digital journal access, and dedicated reading halls across two floors.</div>
+      <span class="tour-coming-soon">360° tour coming soon</span>
+    </div>
+    <div class="tour-card">
+      <div class="tour-card-icon">⚽</div>
+      <div class="tour-card-title">Sports Grounds</div>
+      <div class="tour-card-text">Cricket, basketball, football, volleyball courts and an indoor badminton hall.</div>
+      <span class="tour-coming-soon">360° tour coming soon</span>
+    </div>
+    <div class="tour-card">
+      <div class="tour-card-icon">🏠</div>
+      <div class="tour-card-title">Hostel Block</div>
+      <div class="tour-card-text">Boys' and girls' hostels with mess, common rooms, and 24/7 Wi-Fi connectivity.</div>
+      <span class="tour-coming-soon">360° tour coming soon</span>
+    </div>
+    <div class="tour-card">
+      <div class="tour-card-icon">🎭</div>
+      <div class="tour-card-title">Seminar Halls &amp; Auditorium</div>
+      <div class="tour-card-text">Main auditorium (capacity 1000+) and multiple seminar halls used for talks, fests, and events.</div>
+      <span class="tour-coming-soon">360° tour coming soon</span>
+    </div>
+  </div>
+</section>
+
+<!-- EXPLORE SECTIONS -->
+<section id="explore">
+  <div class="section-tag">Navigate</div>
+  <h2 class="section-title">Everything You Need to Know</h2>
+  <p class="section-lead">Explore the sections that matter most to you.</p>
+  <div class="explore-grid">
+    <a href="placements.html" class="explore-card">
+      <div class="explore-num">01</div>
+      <div class="explore-title">Placements</div>
+      <div class="explore-desc">Real placement data — companies, packages, top recruiters by year. No inflated averages.</div>
+      <div class="explore-arrow">View Placements →</div>
+    </a>
+    <a href="academia.html" class="explore-card">
+      <div class="explore-num">02</div>
+      <div class="explore-title">Academia</div>
+      <div class="explore-desc">Courses, departments, seat matrix, syllabus by semester — all of BMSCE's engineering programs.</div>
+      <div class="explore-arrow">Explore Programs →</div>
+    </a>
+    <a href="projects.html" class="explore-card">
+      <div class="explore-num">03</div>
+      <div class="explore-title">Student Projects</div>
+      <div class="explore-desc">Verified projects by BMSCE students — browse by department, year, or technology.</div>
+      <div class="explore-arrow">See Projects →</div>
+    </a>
+    <a href="news.html" class="explore-card">
+      <div class="explore-num">04</div>
+      <div class="explore-title">News &amp; Updates</div>
+      <div class="explore-desc">Stay current with what's happening at BMSCE — events, achievements, circulars.</div>
+      <div class="explore-arrow">Read News →</div>
+    </a>
+    <a href="fests.html" class="explore-card">
+      <div class="explore-num">05</div>
+      <div class="explore-title">Fests &amp; Activities</div>
+      <div class="explore-desc">PhaseShift and Utsav — BMSCE's two flagship annual fests, plus club and activity life.</div>
+      <div class="explore-arrow">Explore Fests →</div>
+    </a>
+    <a href="campus-login.html" class="explore-card">
+      <div class="explore-num">06</div>
+      <div class="explore-title">Campus Login</div>
+      <div class="explore-desc">Already a student? Log in to access your marks, attendance, and internal resources.</div>
+      <div class="explore-arrow">Student Portal →</div>
+    </a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div>
+    <div class="footer-brand">BMS University</div>
+    <div class="footer-note">Bull Temple Road, Bengaluru - 560019 · Karnataka, India</div>
+  </div>
+  <div class="footer-links">
+    <a href="#about">About</a>
+    <a href="placements.html">Placements</a>
+    <a href="academia.html">Academia</a>
+    <a href="news.html">News</a>
+    <a href="fests.html">Fests</a>
+    <a href="campus-login.html">Campus Login</a>
+  </div>
+</footer>
+<script type="module">
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
+
+const supabaseUrl = 'YOUR_URL'
+const supabaseKey = 'YOUR_ANON_KEY'
+
+const supabase = createClient(supabaseUrl, supabaseKey)
+
+async function loadStats() {
+  const { data, error } = await supabase
+    .from('site_stats')
+    .select('*')
+    .single()
+
+  if (error) {
+    console.error(error)
+    return
+  }
+
+  document.getElementById('stat-years').innerText = data.years
+  document.getElementById('stat-dept').innerText = data.departments
+  document.getElementById('stat-companies').innerText = data.companies
+  document.getElementById('stat-accreditation').innerText = data.accreditation
+}
+
+loadStats()
+</script>
+
+</body>
+</html>
+</body>
+</html>

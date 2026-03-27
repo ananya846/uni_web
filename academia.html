@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Academia | BMS University</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  :root{
+    --brick:#8B3A3A;--brick-dk:#6B2A2A;--brick-lt:#C47A7A;
+    --sand:#F5EDD8;--steel:#2E6DA4;--steel-lt:#5D9AD4;
+    --charcoal:#1C1C1E;--off-white:#FAFAF7;--mid-gray:#6E6E73;
+    --border:rgba(139,58,58,0.15);
+  }
+  html{scroll-behavior:smooth;}
+  body{font-family:'DM Sans',sans-serif;background:var(--off-white);color:var(--charcoal);}
+
+  nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(250,250,247,0.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 4rem;height:68px;}
+  .nav-brand{display:flex;align-items:center;gap:12px;text-decoration:none;}
+  .nav-logo{width:38px;height:38px;border-radius:8px;background:var(--brick);display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;color:white;font-size:16px;font-weight:700;}
+  .nav-title{font-family:'Playfair Display',serif;font-size:18px;font-weight:600;color:var(--charcoal);}
+  .nav-links{display:flex;align-items:center;gap:2rem;}
+  .nav-links a{text-decoration:none;font-size:14px;color:var(--mid-gray);transition:color 0.2s;}
+  .nav-links a:hover,.nav-links a.active{color:var(--brick);}
+  .btn-campus{background:var(--brick);color:white;border:none;border-radius:8px;padding:9px 20px;font-size:13px;font-weight:500;font-family:'DM Sans',sans-serif;cursor:pointer;text-decoration:none;display:inline-block;}
+
+  .page-header{padding:6rem 4rem 3rem;background:linear-gradient(to bottom,var(--sand),var(--off-white));border-bottom:1px solid var(--border);}
+  .page-tag{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--brick);font-weight:500;margin-bottom:0.75rem;}
+  .page-title{font-family:'Playfair Display',serif;font-size:clamp(2rem,3.5vw,3.2rem);font-weight:700;color:var(--charcoal);margin-bottom:0.75rem;}
+  .page-subtitle{font-size:16px;color:var(--mid-gray);line-height:1.8;max-width:640px;}
+
+  /* COLLEGE TABS */
+  .college-tabs{padding:2rem 4rem 0;display:flex;gap:0.75rem;flex-wrap:wrap;border-bottom:2px solid var(--border);}
+  .ctab{padding:10px 22px;border-radius:8px 8px 0 0;font-size:13px;font-weight:500;border:1.5px solid transparent;background:transparent;color:var(--mid-gray);cursor:pointer;transition:all 0.2s;font-family:'DM Sans',sans-serif;border-bottom:none;}
+  .ctab.active,.ctab:hover{background:var(--brick);color:white;}
+  .ctab.active{border-color:var(--brick);}
+
+  /* PANELS */
+  .panel{display:none;padding:3rem 4rem;}
+  .panel.active{display:block;}
+
+  /* BMSCE CONTENT */
+  .bmsce-intro{font-size:15px;color:var(--mid-gray);line-height:1.8;max-width:700px;margin-bottom:2.5rem;}
+
+  /* DIVISION TABS */
+  .div-tabs{display:flex;gap:0.5rem;margin-bottom:2rem;flex-wrap:wrap;}
+  .dtab{padding:8px 18px;border-radius:30px;font-size:13px;font-weight:500;border:1.5px solid var(--border);background:white;color:var(--mid-gray);cursor:pointer;transition:all 0.2s;font-family:'DM Sans',sans-serif;}
+  .dtab.active,.dtab:hover{background:var(--brick);color:white;border-color:var(--brick);}
+
+  /* DEPT PANELS */
+  .dept-panel{display:none;}
+  .dept-panel.active{display:block;}
+
+  /* BRANCH CARDS */
+  .branches-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.5rem;margin-bottom:3rem;}
+  .branch-card{background:white;border:1px solid var(--border);border-radius:16px;padding:1.5rem;transition:transform 0.2s,box-shadow 0.2s;}
+  .branch-card:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(139,58,58,0.1);}
+  .branch-name{font-size:15px;font-weight:500;color:var(--charcoal);margin-bottom:0.25rem;}
+  .branch-code{font-size:11px;color:var(--mid-gray);letter-spacing:0.5px;margin-bottom:1rem;}
+  .seat-row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid rgba(139,58,58,0.08);font-size:13px;}
+  .seat-row:last-child{border-bottom:none;}
+  .seat-label{color:var(--mid-gray);}
+  .seat-val{font-weight:500;color:var(--charcoal);}
+  .seat-total{display:flex;justify-content:space-between;align-items:center;margin-top:1rem;padding-top:1rem;border-top:2px solid var(--border);}
+  .seat-total-label{font-size:12px;color:var(--mid-gray);font-weight:500;}
+  .seat-total-val{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:700;color:var(--brick);}
+
+  /* SYLLABUS */
+  .syllabus-section{margin-top:1rem;}
+  .syllabus-title{font-size:15px;font-weight:500;color:var(--charcoal);margin-bottom:1rem;}
+  .sem-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0.75rem;}
+  .sem-btn{
+    position:relative;padding:10px 14px;border-radius:10px;
+    font-size:13px;font-weight:500;border:1.5px solid var(--border);
+    background:white;color:var(--charcoal);cursor:pointer;
+    font-family:'DM Sans',sans-serif;text-align:left;
+    transition:border-color 0.2s,background 0.2s;
+  }
+  .sem-btn:hover{border-color:var(--brick);background:var(--sand);}
+  .sem-btn:hover .sem-dropdown{display:block;}
+  .sem-label{font-size:11px;color:var(--mid-gray);display:block;margin-bottom:2px;}
+  .sem-dropdown{
+    display:none;position:absolute;top:100%;left:0;right:0;
+    background:white;border:1.5px solid var(--border);
+    border-radius:10px;margin-top:4px;z-index:50;
+    padding:0.5rem;box-shadow:0 8px 24px rgba(0,0,0,0.1);
+    min-width:200px;
+  }
+  .sem-dd-item{
+    display:flex;align-items:center;gap:8px;padding:8px 10px;
+    border-radius:6px;font-size:13px;color:var(--charcoal);
+    text-decoration:none;transition:background 0.15s;
+  }
+  .sem-dd-item:hover{background:var(--sand);}
+  .sem-dd-icon{font-size:14px;}
+
+  /* OTHER COLLEGES */
+  .other-colleges-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.5rem;margin-top:1rem;}
+  .oc-card{background:white;border:1px solid var(--border);border-radius:16px;padding:1.5rem;}
+  .oc-name{font-size:16px;font-weight:500;color:var(--charcoal);margin-bottom:0.5rem;}
+  .oc-desc{font-size:13px;color:var(--mid-gray);line-height:1.6;}
+  .oc-tag{display:inline-block;margin-top:0.75rem;font-size:11px;background:var(--sand);color:var(--brick);padding:3px 10px;border-radius:20px;}
+  .coming-soon-banner{background:var(--sand);border-radius:12px;padding:2rem;text-align:center;color:var(--mid-gray);font-size:14px;margin-top:1rem;}
+
+  footer{background:var(--charcoal);color:white;padding:2rem 4rem;display:flex;justify-content:space-between;align-items:center;}
+  .footer-brand{font-family:'Playfair Display',serif;font-size:16px;color:var(--sand);}
+  .footer-links{display:flex;gap:1.5rem;}
+  .footer-links a{font-size:13px;color:rgba(255,255,255,0.4);text-decoration:none;}
+  .footer-links a:hover{color:var(--sand);}
+
+  @media(max-width:900px){
+    nav{padding:0 1.5rem;}.nav-links{display:none;}
+    .page-header,.college-tabs,.panel{padding-left:1.5rem;padding-right:1.5rem;}
+    .sem-grid{grid-template-columns:repeat(2,1fr);}
+    footer{flex-direction:column;gap:1rem;}
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-brand">
+    <div class="nav-logo">BMS</div>
+    <div class="nav-title">BMS University</div>
+  </a>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="placements.html">Placements</a>
+    <a href="academia.html" class="active">Academia</a>
+    <a href="projects.html">Projects</a>
+    <a href="news.html">News</a>
+    <a href="fests.html">Fests</a>
+  </div>
+  <a href="campus-login.html" class="btn-campus">Campus Login →</a>
+</nav>
+
+<div class="page-header">
+  <div class="page-tag">Programs &amp; Curriculum</div>
+  <h1 class="page-title">Academia at BMS University</h1>
+  <p class="page-subtitle">Explore programs across all BMS institutions. Select a college below. Currently detailed information is available for BMSCE (Engineering).</p>
+</div>
+
+<!-- COLLEGE TABS -->
+<div class="college-tabs">
+  <button class="ctab active" onclick="switchCollege('bmsce',this)">BMSCE · Engineering</button>
+  <button class="ctab" onclick="switchCollege('bmsccm',this)">BMSCCM · Commerce &amp; Mgmt</button>
+  <button class="ctab" onclick="switchCollege('bmswomen',this)">BMS Women's College</button>
+  <button class="ctab" onclick="switchCollege('bmsca',this)">BMSCA · Architecture</button>
+  <button class="ctab" onclick="switchCollege('bmslaw',this)">BMS Law College</button>
+  <button class="ctab" onclick="switchCollege('pg',this)">Post Graduate</button>
+  <button class="ctab" onclick="switchCollege('phd',this)">PhD</button>
+</div>
+
+<!-- BMSCE PANEL -->
+<div class="panel active" id="panel-bmsce">
+  <p class="bmsce-intro">BMSCE (BMS College of Engineering) is an autonomous institution affiliated to VTU, offering undergraduate engineering programs across multiple divisions. Select a division to view departments, seat matrix, and semester-wise syllabus.</p>
+
+  <!-- DIVISION TABS -->
+  <div class="div-tabs">
+    <button class="dtab active" onclick="switchDiv('cse',this)">CSE Division</button>
+    <button class="dtab" onclick="switchDiv('ece',this)">ECE Division</button>
+    <button class="dtab" onclick="switchDiv('mech',this)">Mechanical Division</button>
+    <button class="dtab" onclick="switchDiv('civil',this)">Civil Division</button>
+  </div>
+
+  <!-- CSE DIVISION -->
+  <div class="dept-panel active" id="div-cse">
+   
+      <div class="branches-grid" id="branches-container"></div>
+      
+    </div>
+
+    <!-- SYLLABUS -->
+    <div class="syllabus-section">
+      <div class="syllabus-title">Semester-wise Syllabus — CSE Division</div>
+      <div class="sem-grid">
+        <div class="sem-btn">
+          <span class="sem-label">Semester</span>1st Sem
+          <div class="sem-dropdown">
+            <a href="#" class="sem-dd-item"><span class="sem-dd-icon">📄</span>Engineering Mathematics I</a>
+            <a href="#" class="sem-dd-item"><span class="sem-dd-icon">📄</span>Engineering Physics</a>
+            <a href="#" class="sem-dd-item"><span class="sem-dd-icon">📄</span>Elements of Civil Engg</a>
+            <a href="#" class="sem-dd-item"><span class="sem-dd-icon">📄</span>C Programming</a>
+            <a href="#" class="sem-dd-item"><span class="sem-dd-icon">📋</span>Download Full Scheme PDF</a>
+          </div>
+        </div>
+        <div class="sem-btn">
+          <span class="sem-label">Semester</span>2nd Sem
+          <div class="sem-dropdown">
+            <a href="#" class="sem-dd-item"><span class="sem-dd-icon">📄</span>Engineering Mathematics II</a>
+            <a href="#" class="sem-dd-item"><span class="sem-dd-icon">📄</span>Engineering Chemistry</a>
+            <a href="#" class="sem-dd-item"><span class="sem-dd-icon">📄</span>Basic Electronics</a>
+            <a href="#" class="sem-dd-item"><span class="sem-dd-icon">📄</span>Computer Concepts &amp; C++</a>
+            <a href="#" class="sem-dd-item"><span class="sem-dd-icon">📋</span>Download Full Scheme PDF</a>
+          </div>
+        </div>
+        <div class="sem-btn">
+          <span class="sem-label">Semester</span>3rd Sem
+          <div class="sem-dropdown">
+            <a href="#" class="sem-dd-item"><span class="sem-dd-icon">📄</span>Discrete Mathematics</a>
+            <a href="#" class="sem-dd-item"><span class="sem-dd-icon">📄</span>Data Structures</a>
+            <a href="#" class="sem-dd-item"><span class="sem-dd-icon">📄</span>Digital Electronics</a>
+            <a href="#" class="sem-dd-item"><span class="sem-dd-icon">📄</span>Computer Organisation</a>
+            <a href="#" class="sem-dd-item"><span class="sem-dd-icon">📋</span>Download Full Scheme PDF</a>
+          </div>
+        </div>
+        <div class="sem-btn">
+          <span class="sem-label">Semester</span>4th Sem
+          <div class="sem-dropdown">
+            <a href="#" class="sem-dd-item"><span class="sem-dd-icon">📄</span>Analysis of Algorithms</a>
+            <a href="#" class="sem-dd-item"><span class="sem-dd-icon">📄</span>DBMS</a>
+            <a href="#" class="sem-dd-item"><span class="sem-dd-icon">📄</span>Operating Systems</a>
+            <a href="#" class="sem-dd-item"><span class="sem-dd-icon">📄</span>Microprocessors</a>
+            <a href="#" class="sem-dd-item"><span class="sem-dd-icon">📋</span>Download Full Scheme PDF</a>
+          </div>
+        </div>
+        <div class="sem-btn">
+          <span class="sem-label">Semester</span>5th Sem
+          <div class="sem-dropdown">
+            <a href="#" class="sem-dd-item"><span class="sem-dd-icon">📄</span>Computer Networks</a>
+            <a href="#" class="sem-dd-item"><span class="sem-dd-icon">📄</span>Software Engineering</a>
+            <a href="#" class="sem-dd-item"><span class="sem-dd-icon">📄</span>Machine Learning</a>
+            <a href="#" class="sem-dd-item"><span class="sem-dd-icon">📄</span>Automata Theory</a>
+            <a href="#" class="sem-dd-item"><span class="sem-dd-icon">📋</span>Download Full Scheme PDF</a>
+          </div>
+        </div>
+        <div class="sem-btn">
+          <span class="sem-label">Semester</span>6th Sem
+          <div class="sem-dropdown">
+            <a href="#" class="sem-dd-item"><span class="sem-dd-icon">📄</span>Compiler Design</a>
+            <a href="#" class="sem-dd-item"><span class="sem-dd-icon">📄</span>Cloud Computing</a>
+            <a href="#" class="sem-dd-item"><span class="sem-dd-icon">📄</span>Information Security</a>
+            <a href="#" class="sem-dd-item"><span class="sem-dd-icon">📄</span>Electives Begin</a>
+            <a href="#" class="sem-dd-item"><span class="sem-dd-icon">📋</span>Download Full Scheme PDF</a>
+          </div>
+        </div>
+        <div class="sem-btn">
+          <span class="sem-label">Semester</span>7th Sem
+          <div class="sem-dropdown">
+            <a href="#" class="sem-dd-item"><span class="sem-dd-icon">📄</span>Deep Learning</a>
+            <a href="#" class="sem-dd-item"><span class="sem-dd-icon">📄</span>Big Data Analytics</a>
+            <a href="#" class="sem-dd-item"><span class="sem-dd-icon">📄</span>Internship / Project Phase I</a>
+            <a href="#" class="sem-dd-item"><span class="sem-dd-icon">📋</span>Download Full Scheme PDF</a>
+          </div>
+        </div>
+        <div class="sem-btn">
+          <span class="sem-label">Semester</span>8th Sem
+          <div class="sem-dropdown">
+            <a href="#" class="sem-dd-item"><span class="sem-dd-icon">📄</span>Project Phase II</a>
+            <a href="#" class="sem-dd-item"><span class="sem-dd-icon">📄</span>Professional Elective</a>
+            <a href="#" class="sem-dd-item"><span class="sem-dd-icon">📄</span>Open Elective</a>
+            <a href="#" class="sem-dd-item"><span class="sem-dd-icon">📋</span>Download Full Scheme PDF</a>
+          </div>
+        </div>
+      </div>
+      <p style="font-size:12px;color:var(--mid-gray);margin-top:1rem;">* Hover over a semester to see subjects. Replace # links with actual PDF paths when uploading syllabus documents.</p>
+    </div>
+  </div>
+
+  <!-- ECE DIVISION -->
+  <div class="dept-panel" id="div-ece">
+    <div class="branches-grid">
+      <div class="branch-card">
+        <div class="branch-name">Electronics &amp; Communication Engineering</div>
+        <div class="branch-code">DEPT CODE: ECE · Autonomous · VTU Affiliated</div>
+        <div class="seat-row"><span class="seat-label">KCET Seats</span><span class="seat-val">108</span></div>
+        <div class="seat-row"><span class="seat-label">COMEDK Seats</span><span class="seat-val">54</span></div>
+        <div class="seat-row"><span class="seat-label">NRI / Management</span><span class="seat-val">18</span></div>
+        <div class="seat-total"><span class="seat-total-label">Total Intake</span><span class="seat-total-val">180</span></div>
+      </div>
+      <div class="branch-card">
+        <div class="branch-name">Electronics &amp; Instrumentation Engineering</div>
+        <div class="branch-code">DEPT CODE: EIE · Autonomous · VTU Affiliated</div>
+        <div class="seat-row"><span class="seat-label">KCET Seats</span><span class="seat-val">36</span></div>
+        <div class="seat-row"><span class="seat-label">COMEDK Seats</span><span class="seat-val">18</span></div>
+        <div class="seat-row"><span class="seat-label">NRI / Management</span><span class="seat-val">6</span></div>
+        <div class="seat-total"><span class="seat-total-label">Total Intake</span><span class="seat-total-val">60</span></div>
+      </div>
+    </div>
+    <div class="syllabus-section">
+      <div class="syllabus-title">Semester-wise Syllabus — ECE Division</div>
+      <div class="sem-grid">
+        <div class="sem-btn"><span class="sem-label">Semester</span>1st Sem<div class="sem-dropdown"><a href="#" class="sem-dd-item"><span class="sem-dd-icon">📄</span>Engineering Maths I</a><a href="#" class="sem-dd-item"><span class="sem-dd-icon">📄</span>Engineering Physics</a><a href="#" class="sem-dd-item"><span class="sem-dd-icon">📋</span>Download Full PDF</a></div></div>
+        <div class="sem-btn"><span class="sem-label">Semester</span>2nd Sem<div class="sem-dropdown"><a href="#" class="sem-dd-item"><span class="sem-dd-icon">📄</span>Engineering Maths II</a><a href="#" class="sem-dd-item"><span class="sem-dd-icon">📄</span>Basic Electronics</a><a href="#" class="sem-dd-item"><span class="sem-dd-icon">📋</span>Download Full PDF</a></div></div>
+        <div class="sem-btn"><span class="sem-label">Semester</span>3rd Sem<div class="sem-dropdown"><a href="#" class="sem-dd-item"><span class="sem-dd-icon">📄</span>Network Theory</a><a href="#" class="sem-dd-item"><span class="sem-dd-icon">📄</span>Digital Electronics</a><a href="#" class="sem-dd-item"><span class="sem-dd-icon">📋</span>Download Full PDF</a></div></div>
+        <div class="sem-btn"><span class="sem-label">Semester</span>4th Sem<div class="sem-dropdown"><a href="#" class="sem-dd-item"><span class="sem-dd-icon">📄</span>Signals &amp; Systems</a><a href="#" class="sem-dd-item"><span class="sem-dd-icon">📄</span>Analog Electronics</a><a href="#" class="sem-dd-item"><span class="sem-dd-icon">📋</span>Download Full PDF</a></div></div>
+        <div class="sem-btn"><span class="sem-label">Semester</span>5th Sem<div class="sem-dropdown"><a href="#" class="sem-dd-item"><span class="sem-dd-icon">📄</span>Microcontrollers</a><a href="#" class="sem-dd-item"><span class="sem-dd-icon">📄</span>Digital Communication</a><a href="#" class="sem-dd-item"><span class="sem-dd-icon">📋</span>Download Full PDF</a></div></div>
+        <div class="sem-btn"><span class="sem-label">Semester</span>6th Sem<div class="sem-dropdown"><a href="#" class="sem-dd-item"><span class="sem-dd-icon">📄</span>VLSI Design</a><a href="#" class="sem-dd-item"><span class="sem-dd-icon">📄</span>Wireless Communication</a><a href="#" class="sem-dd-item"><span class="sem-dd-icon">📋</span>Download Full PDF</a></div></div>
+        <div class="sem-btn"><span class="sem-label">Semester</span>7th Sem<div class="sem-dropdown"><a href="#" class="sem-dd-item"><span class="sem-dd-icon">📄</span>Embedded Systems</a><a href="#" class="sem-dd-item"><span class="sem-dd-icon">📄</span>Project Phase I</a><a href="#" class="sem-dd-item"><span class="sem-dd-icon">📋</span>Download Full PDF</a></div></div>
+        <div class="sem-btn"><span class="sem-label">Semester</span>8th Sem<div class="sem-dropdown"><a href="#" class="sem-dd-item"><span class="sem-dd-icon">📄</span>Project Phase II</a><a href="#" class="sem-dd-item"><span class="sem-dd-icon">📄</span>Electives</a><a href="#" class="sem-dd-item"><span class="sem-dd-icon">📋</span>Download Full PDF</a></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MECH DIVISION -->
+  <div class="dept-panel" id="div-mech">
+    <div class="branches-grid">
+      <div class="branch-card">
+        <div class="branch-name">Mechanical Engineering</div>
+        <div class="branch-code">DEPT CODE: ME · Autonomous · VTU Affiliated</div>
+        <div class="seat-row"><span class="seat-label">KCET Seats</span><span class="seat-val">108</span></div>
+        <div class="seat-row"><span class="seat-label">COMEDK Seats</span><span class="seat-val">54</span></div>
+        <div class="seat-row"><span class="seat-label">NRI / Management</span><span class="seat-val">18</span></div>
+        <div class="seat-total"><span class="seat-total-label">Total Intake</span><span class="seat-total-val">180</span></div>
+      </div>
+      <div class="branch-card">
+        <div class="branch-name">Industrial Engineering &amp; Management</div>
+        <div class="branch-code">DEPT CODE: IEM · Autonomous · VTU Affiliated</div>
+        <div class="seat-row"><span class="seat-label">KCET Seats</span><span class="seat-val">36</span></div>
+        <div class="seat-row"><span class="seat-label">COMEDK Seats</span><span class="seat-val">18</span></div>
+        <div class="seat-row"><span class="seat-label">NRI / Management</span><span class="seat-val">6</span></div>
+        <div class="seat-total"><span class="seat-total-label">Total Intake</span><span class="seat-total-val">60</span></div>
+      </div>
+    </div>
+    <div class="coming-soon-banner">Semester-wise syllabus for Mechanical Division coming soon. Contact the department office for current scheme documents.</div>
+  </div>
+
+  <!-- CIVIL DIVISION -->
+  <div class="dept-panel" id="div-civil">
+    <div class="branches-grid">
+      <div class="branch-card">
+        <div class="branch-name">Civil Engineering</div>
+        <div class="branch-code">DEPT CODE: CV · Autonomous · VTU Affiliated</div>
+        <div class="seat-row"><span class="seat-label">KCET Seats</span><span class="seat-val">54</span></div>
+        <div class="seat-row"><span class="seat-label">COMEDK Seats</span><span class="seat-val">27</span></div>
+        <div class="seat-row"><span class="seat-label">NRI / Management</span><span class="seat-val">9</span></div>
+        <div class="seat-total"><span class="seat-total-label">Total Intake</span><span class="seat-total-val">90</span></div>
+      </div>
+    </div>
+    <div class="coming-soon-banner">Semester-wise syllabus for Civil Division coming soon. Contact the department office for current scheme documents.</div>
+  </div>
+</div>
+
+<!-- OTHER COLLEGE PANELS -->
+<div class="panel" id="panel-bmsccm">
+  <div class="coming-soon-banner" style="font-size:16px;padding:3rem;">
+    <strong style="display:block;font-size:1.2rem;margin-bottom:0.5rem;">BMSCCM</strong>
+    BMS College of Commerce and Management content is being compiled. Check back soon.
+  </div>
+</div>
+<div class="panel" id="panel-bmswomen">
+  <div class="coming-soon-banner" style="font-size:16px;padding:3rem;">
+    <strong style="display:block;font-size:1.2rem;margin-bottom:0.5rem;">BMS Women's College</strong>
+    Content being compiled. Check back soon.
+  </div>
+</div>
+<div class="panel" id="panel-bmsca">
+  <div class="coming-soon-banner" style="font-size:16px;padding:3rem;">
+    <strong style="display:block;font-size:1.2rem;margin-bottom:0.5rem;">BMSCA — Architecture</strong>
+    Content being compiled. Check back soon.
+  </div>
+</div>
+<div class="panel" id="panel-bmslaw">
+  <div class="coming-soon-banner" style="font-size:16px;padding:3rem;">
+    <strong style="display:block;font-size:1.2rem;margin-bottom:0.5rem;">BMS Law College</strong>
+    Content being compiled. Check back soon.
+  </div>
+</div>
+<div class="panel" id="panel-pg">
+  <div class="coming-soon-banner" style="font-size:16px;padding:3rem;">
+    <strong style="display:block;font-size:1.2rem;margin-bottom:0.5rem;">Post Graduate Programs</strong>
+    ME/MTech programs across departments. Content being compiled.
+  </div>
+</div>
+<div class="panel" id="panel-phd">
+  <div class="coming-soon-banner" style="font-size:16px;padding:3rem;">
+    <strong style="display:block;font-size:1.2rem;margin-bottom:0.5rem;">PhD Programs</strong>
+    Research programs and faculty supervisors. Content being compiled.
+  </div>
+</div>
+
+<footer>
+  <div class="footer-brand">BMS University</div>
+  <div class="footer-links">
+    <a href="index.html">Home</a>
+    <a href="placements.html">Placements</a>
+    <a href="fests.html">Fests</a>
+    <a href="news.html">News</a>
+  </div>
+</footer>
+
+<script type="module">
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
+
+const supabaseUrl = 'YOUR_URL'
+const supabaseKey = 'YOUR_KEY'
+
+const supabase = createClient(supabaseUrl, supabaseKey)
+
+let allBranches = []
+
+async function loadBranches() {
+  const { data, error } = await supabase
+    .from('branches')
+    .select('*')
+
+  if (error) {
+    console.error(error)
+    return
+  }
+
+  allBranches = data
+  renderBranches('cse') // default
+}
+
+function renderBranches(division) {
+  const container = document.getElementById('branches-container')
+  container.innerHTML = ''
+
+  const filtered = allBranches.filter(b => b.division === division)
+
+  filtered.forEach(b => {
+    const card = `
+      <div class="branch-card">
+        <div class="branch-name">${b.name}</div>
+        <div class="branch-code">DEPT CODE: ${b.code} · Autonomous · VTU Affiliated</div>
+
+        <div class="seat-row"><span class="seat-label">KCET Seats</span><span class="seat-val">${b.kcet}</span></div>
+        <div class="seat-row"><span class="seat-label">COMEDK Seats</span><span class="seat-val">${b.comedk}</span></div>
+        <div class="seat-row"><span class="seat-label">NRI / Management</span><span class="seat-val">${b.management}</span></div>
+        <div class="seat-row"><span class="seat-label">SNQ / Other</span><span class="seat-val">${b.other}</span></div>
+
+        <div class="seat-total">
+          <span class="seat-total-label">Total Intake</span>
+          <span class="seat-total-val">${b.total}</span>
+        </div>
+      </div>
+    `
+    container.innerHTML += card
+  })
+}
+
+window.switchDiv = function(id, btn) {
+  document.querySelectorAll('.dtab').forEach(b => b.classList.remove('active'))
+  document.querySelectorAll('.dept-panel').forEach(p => p.classList.remove('active'))
+
+  btn.classList.add('active')
+  document.getElementById('div-' + id).classList.add('active')
+
+  renderBranches(id) // 🔥 dynamic load
+}
+
+function switchCollege(id, btn) {
+  document.querySelectorAll('.ctab').forEach(b => b.classList.remove('active'))
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'))
+  btn.classList.add('active')
+  document.getElementById('panel-' + id).classList.add('active')
+}
+
+loadBranches()
+</script>
+</body>
+</html>

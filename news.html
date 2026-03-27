@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>News | BMS University</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  :root{--brick:#8B3A3A;--brick-dk:#6B2A2A;--sand:#F5EDD8;--steel:#2E6DA4;--charcoal:#1C1C1E;--off-white:#FAFAF7;--mid-gray:#6E6E73;--border:rgba(139,58,58,0.15);}
+  html{scroll-behavior:smooth;}
+  body{font-family:'DM Sans',sans-serif;background:var(--off-white);color:var(--charcoal);}
+  nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(250,250,247,0.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 4rem;height:68px;}
+  .nav-brand{display:flex;align-items:center;gap:12px;text-decoration:none;}
+  .nav-logo{width:38px;height:38px;border-radius:8px;background:var(--brick);display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;color:white;font-size:16px;font-weight:700;}
+  .nav-title{font-family:'Playfair Display',serif;font-size:18px;font-weight:600;color:var(--charcoal);}
+  .nav-links{display:flex;align-items:center;gap:2rem;}
+  .nav-links a{text-decoration:none;font-size:14px;color:var(--mid-gray);transition:color 0.2s;}
+  .nav-links a:hover,.nav-links a.active{color:var(--brick);}
+  .btn-campus{background:var(--brick);color:white;border:none;border-radius:8px;padding:9px 20px;font-size:13px;font-weight:500;font-family:'DM Sans',sans-serif;cursor:pointer;text-decoration:none;display:inline-block;}
+
+  .page-header{padding:6rem 4rem 3rem;background:linear-gradient(to bottom,var(--sand),var(--off-white));border-bottom:1px solid var(--border);}
+  .page-tag{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--brick);font-weight:500;margin-bottom:0.75rem;}
+  .page-title{font-family:'Playfair Display',serif;font-size:clamp(2rem,3.5vw,3.2rem);font-weight:700;color:var(--charcoal);margin-bottom:0.75rem;}
+  .page-subtitle{font-size:16px;color:var(--mid-gray);line-height:1.8;max-width:600px;}
+
+  /* SIGNUP */
+  .signup-section{padding:2.5rem 4rem;background:var(--charcoal);}
+  .signup-inner{display:flex;align-items:center;justify-content:space-between;gap:2rem;flex-wrap:wrap;}
+  .signup-text h3{font-family:'Playfair Display',serif;font-size:1.4rem;color:var(--sand);margin-bottom:0.25rem;}
+  .signup-text p{font-size:14px;color:rgba(255,255,255,0.4);}
+  .signup-form{display:flex;gap:0.75rem;}
+  .signup-input{padding:10px 16px;border-radius:8px;border:1.5px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.08);color:white;font-size:14px;font-family:'DM Sans',sans-serif;width:260px;}
+  .signup-input::placeholder{color:rgba(255,255,255,0.3);}
+  .signup-btn{padding:10px 20px;background:var(--brick);color:white;border:none;border-radius:8px;font-size:14px;font-weight:500;font-family:'DM Sans',sans-serif;cursor:pointer;}
+  .signup-btn:hover{background:var(--brick-dk);}
+  .signup-success{display:none;color:var(--sand);font-size:14px;}
+
+  /* FILTERS */
+  .news-filters{padding:2rem 4rem 1rem;display:flex;gap:0.75rem;flex-wrap:wrap;}
+  .filter-btn{padding:7px 16px;border-radius:30px;font-size:13px;font-weight:500;border:1.5px solid var(--border);background:white;color:var(--mid-gray);cursor:pointer;transition:all 0.2s;font-family:'DM Sans',sans-serif;}
+  .filter-btn.active,.filter-btn:hover{background:var(--brick);color:white;border-color:var(--brick);}
+
+  /* NEWS GRID */
+  .news-grid{padding:1rem 4rem 4rem;display:grid;grid-template-columns:2fr 1fr;gap:2rem;align-items:start;}
+  .news-main{}
+  .news-featured{background:white;border:1px solid var(--border);border-radius:16px;overflow:hidden;margin-bottom:1.5rem;transition:transform 0.2s,box-shadow 0.2s;}
+  .news-featured:hover{transform:translateY(-3px);box-shadow:0 10px 28px rgba(139,58,58,0.1);}
+  .news-feat-img{height:200px;background:var(--sand);display:flex;align-items:center;justify-content:center;font-size:3rem;}
+  .news-feat-body{padding:1.5rem;}
+  .news-cat{display:inline-block;font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--brick);font-weight:500;margin-bottom:0.5rem;}
+  .news-h{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:600;color:var(--charcoal);margin-bottom:0.5rem;line-height:1.3;}
+  .news-p{font-size:14px;color:var(--mid-gray);line-height:1.7;}
+  .news-meta{font-size:12px;color:rgba(110,110,115,0.6);margin-top:0.75rem;}
+
+  .news-item{background:white;border:1px solid var(--border);border-radius:12px;padding:1.25rem;margin-bottom:1rem;display:flex;gap:1rem;transition:transform 0.2s;}
+  .news-item:hover{transform:translateX(4px);}
+  .news-item-icon{font-size:1.5rem;flex-shrink:0;}
+  .news-item-title{font-size:14px;font-weight:500;color:var(--charcoal);margin-bottom:4px;}
+  .news-item-meta{font-size:12px;color:var(--mid-gray);}
+
+  /* SIDEBAR */
+  .news-sidebar{}
+  .sidebar-card{background:white;border:1px solid var(--border);border-radius:16px;padding:1.5rem;margin-bottom:1.5rem;}
+  .sidebar-title{font-size:14px;font-weight:500;color:var(--charcoal);margin-bottom:1rem;}
+  .sidebar-item{padding:10px 0;border-bottom:1px solid rgba(139,58,58,0.08);font-size:13px;color:var(--mid-gray);line-height:1.5;}
+  .sidebar-item:last-child{border-bottom:none;}
+  .sidebar-item strong{color:var(--charcoal);display:block;font-size:13px;}
+
+  footer{background:var(--charcoal);color:white;padding:2rem 4rem;display:flex;justify-content:space-between;align-items:center;}
+  .footer-brand{font-family:'Playfair Display',serif;font-size:16px;color:var(--sand);}
+  .footer-links{display:flex;gap:1.5rem;}
+  .footer-links a{font-size:13px;color:rgba(255,255,255,0.4);text-decoration:none;}
+  .footer-links a:hover{color:var(--sand);}
+
+  @media(max-width:900px){
+    nav{padding:0 1.5rem;}.nav-links{display:none;}
+    .page-header,.signup-section,.news-filters,.news-grid{padding-left:1.5rem;padding-right:1.5rem;}
+    .news-grid{grid-template-columns:1fr;}
+    .signup-inner{flex-direction:column;align-items:flex-start;}
+    .signup-input{width:100%;}
+    footer{flex-direction:column;gap:1rem;}
+  }
+</style>
+</head>
+<body>
+<nav>
+  <a href="index.html" class="nav-brand"><div class="nav-logo">BMS</div><div class="nav-title">BMS University</div></a>
+  <div class="nav-links">
+    <a href="index.html">Home</a><a href="placements.html">Placements</a>
+    <a href="academia.html">Academia</a><a href="projects.html">Projects</a>
+    <a href="news.html" class="active">News</a><a href="fests.html">Fests</a>
+  </div>
+  <a href="campus-login.html" class="btn-campus">Campus Login →</a>
+</nav>
+
+<div class="page-header">
+  <div class="page-tag">Stay Informed</div>
+  <h1 class="page-title">BMS News &amp; Updates</h1>
+  <p class="page-subtitle">Events, achievements, circulars, and campus life. Sign up to get daily digests delivered to your inbox.</p>
+</div>
+
+<div class="signup-section">
+  <div class="signup-inner">
+    <div class="signup-text">
+      <h3>Daily BMS Newsletter</h3>
+      <p>One email a day. Campus news, placement alerts, and event updates.</p>
+    </div>
+    <div class="signup-form" id="signupForm">
+      <input class="signup-input" type="email" placeholder="your@email.com" id="emailInput"/>
+      <button class="signup-btn" onclick="handleSignup()">Subscribe</button>
+    </div>
+    <div class="signup-success" id="signupSuccess">✓ You're subscribed! Check your inbox.</div>
+  </div>
+</div>
+
+<div class="news-filters">
+  <button class="filter-btn active" onclick="filterNews(this,'all')">All</button>
+  <button class="filter-btn" onclick="filterNews(this,'placement')">Placements</button>
+  <button class="filter-btn" onclick="filterNews(this,'event')">Events</button>
+  <button class="filter-btn" onclick="filterNews(this,'achievement')">Achievements</button>
+  <button class="filter-btn" onclick="filterNews(this,'academic')">Academic</button>
+</div>
+
+<div class="news-grid">
+  <div class="news-main">
+    <div class="news-featured" data-cat="placement">
+      <div class="news-feat-img">🏢</div>
+      <div class="news-feat-body">
+        <span class="news-cat">Placements</span>
+        <div class="news-h">Microsoft visits BMSCE for the 3rd consecutive year, places 1 student at ₹42 LPA</div>
+        <div class="news-p">The 2023–24 placement season saw Microsoft return to BMSCE's campus. The highest offer went to Arjun Krishnamurthy from the CSE (AI &amp; ML) department — the highest package in the college's recent history.</div>
+        <div class="news-meta">March 12, 2024 · Placement Cell</div>
+      </div>
+    </div>
+
+    <div class="news-item" data-cat="event">
+      <div class="news-item-icon">🎭</div>
+      <div>
+        <div class="news-item-title">PhaseShift 2024 registrations now open — theme announced: "Neon Nexus"</div>
+        <div class="news-item-meta">Feb 20, 2024 · Fest Committee</div>
+      </div>
+    </div>
+    <div class="news-item" data-cat="achievement">
+      <div class="news-item-icon">🏆</div>
+      <div>
+        <div class="news-item-title">BMSCE team wins Smart India Hackathon 2023 — Civil Dept project on flood prediction</div>
+        <div class="news-item-meta">Dec 19, 2023 · SIH Team</div>
+      </div>
+    </div>
+    <div class="news-item" data-cat="academic">
+      <div class="news-item-icon">📋</div>
+      <div>
+        <div class="news-item-title">VTU exam schedule released — 6th semester exams begin April 8, 2024</div>
+        <div class="news-item-meta">Mar 5, 2024 · Examination Cell</div>
+      </div>
+    </div>
+    <div class="news-item" data-cat="placement">
+      <div class="news-item-icon">💼</div>
+      <div>
+        <div class="news-item-title">Goldman Sachs Technology Analyst drive — 4 students from CSE placed at ₹18 LPA</div>
+        <div class="news-item-meta">Jan 30, 2024 · Placement Cell</div>
+      </div>
+    </div>
+    <div class="news-item" data-cat="event">
+      <div class="news-item-icon">🎤</div>
+      <div>
+        <div class="news-item-title">Guest lecture by ISRO scientist Dr. Anitha Rao — "Future of Space Technology"</div>
+        <div class="news-item-meta">Jan 15, 2024 · ECE Dept</div>
+      </div>
+    </div>
+    <div class="news-item" data-cat="achievement">
+      <div class="news-item-icon">🌍</div>
+      <div>
+        <div class="news-item-title">BMSCE student Riya Sharma selected for Google Summer of Code 2024</div>
+        <div class="news-item-meta">Apr 2, 2024 · CSE Dept</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="news-sidebar">
+    <div class="sidebar-card">
+      <div class="sidebar-title">Upcoming Events</div>
+      <div class="sidebar-item"><strong>PhaseShift 2024</strong>April 19–21 · Main Auditorium</div>
+      <div class="sidebar-item"><strong>VTU 6th Sem Exams</strong>Begins April 8, 2024</div>
+      <div class="sidebar-item"><strong>Industry Visit — Bosch</strong>April 5 · Mech &amp; ISE students</div>
+      <div class="sidebar-item"><strong>Alumni Meet 2024</strong>May 11 · Silver Jubilee Hall</div>
+    </div>
+    <div class="sidebar-card">
+      <div class="sidebar-title">Quick Links</div>
+      <div class="sidebar-item"><a href="#" style="color:var(--steel);text-decoration:none;">→ Academic Calendar 2023–24</a></div>
+      <div class="sidebar-item"><a href="#" style="color:var(--steel);text-decoration:none;">→ Exam Timetable (PDF)</a></div>
+      <div class="sidebar-item"><a href="#" style="color:var(--steel);text-decoration:none;">→ College Circular — Feb 2024</a></div>
+      <div class="sidebar-item"><a href="#" style="color:var(--steel);text-decoration:none;">→ Anti-Ragging Policy</a></div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-brand">BMS University</div>
+  <div class="footer-links">
+    <a href="index.html">Home</a><a href="placements.html">Placements</a>
+    <a href="academia.html">Academia</a><a href="fests.html">Fests</a>
+  </div>
+</footer>
+
+<script>
+  function handleSignup() {
+    const v = document.getElementById('emailInput').value;
+    if(!v || !v.includes('@')) { alert('Please enter a valid email.'); return; }
+    document.getElementById('signupForm').style.display = 'none';
+    document.getElementById('signupSuccess').style.display = 'block';
+  }
+  function filterNews(btn, cat) {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('[data-cat]').forEach(el => {
+      el.style.display = (cat === 'all' || el.dataset.cat === cat) ? '' : 'none';
+    });
+  }
+</script>
+</body>
+</html>
